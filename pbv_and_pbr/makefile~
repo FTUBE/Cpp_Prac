@@ -1,0 +1,4 @@
+pbv: passbyvalue.cpp
+	g++ -W passbyvalue.cpp -o pbv
+clean:
+	rm -f *.o *~
