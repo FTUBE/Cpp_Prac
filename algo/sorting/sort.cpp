@@ -81,3 +81,30 @@ void copy(int arr[],int from, int to,int copy[]){
     copy[i] = arr[from + i];
   }
 }
+
+void quicksort(int arr[], int from, int to){
+  int pointer = from;
+  int start = from;
+  while(pointer <= to){
+    if(pointer == to || arr[pointer] < arr[to]){
+      int temp = arr[start];
+      arr[start] = arr[pointer];
+      arr[pointer] = temp;
+      start++;
+    }
+    pointer++;
+  }
+  print(arr,15);
+  if(start > from + 2)
+    quicksort(arr,from,start-2);
+  if(start <= to-1)
+    quicksort(arr,start,to);
+}
+
+void print(int arr[],int size){
+  cout << "[ ";
+  for(int i = 0; i < size; i++){
+    cout << arr[i] << " ";
+  }
+  cout << "]" << endl;
+}

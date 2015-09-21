@@ -4,12 +4,12 @@
 using namespace std;
 
 void arrprint(int[]);
-const int SIZE = 10;
+const int SIZE = 15;
 
 int main(){
-  int Intarr[SIZE] = {8,7,6,5,4,3,2,1,9,1};
+  int Intarr[SIZE] = {8,7,6,5,4,3,2,1,0,1,5,4,5,4,2};
   arrprint(Intarr);
-  mergesort(Intarr,0,SIZE-1);
+  quicksort(Intarr,0,SIZE-1);
   cout << "After sort : \n";
   arrprint(Intarr);
 }
