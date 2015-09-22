@@ -43,4 +43,14 @@ struct BST{
 BST():head(NULL){};
 };
 
+struct hashtable{
+  // To be implemented.
+};
+
+struct ListNode{
+  int val;
+  ListNode* next;
+ListNode(int _val):val(_val),next(NULL){};
+  void print();
+};
 #endif

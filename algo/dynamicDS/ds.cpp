@@ -6,12 +6,25 @@ using namespace std;
 void teststack(stack& a);
 void testPQueue(PQueue& pq);
 void BSTtest(BST& bst);
-
+ListNode* createNode(int);
+ListNode* reverse(ListNode* head);
+  
 int main(){
   stack a;
   PQueue pq;
   BST binarytree;
-  BSTtest(binarytree);
+  int n = 671;
+  ListNode *head = createNode(n);
+  //  head->print();
+  cout << "Reverse" << endl;
+  ListNode *truehead = head;
+  while(truehead->next != NULL){
+    truehead = truehead -> next;
+  }
+  head = reverse(head);
+  head->next = NULL;
+  head = truehead;
+  //head->print();
 }
 
 void teststack(stack& a){
@@ -42,4 +55,22 @@ void BSTtest(BST& bst){
     i++;
   }
   bst.DFS();
+}
+
+ListNode* createNode(int count){
+  ListNode* head = new ListNode(0);
+  ListNode* current = head;
+  for(int i = 1; i < count; i++){
+    current -> next = new ListNode(i);
+    current = current->next;
+  }
+  return head;
+}
+
+ListNode* reverse(ListNode* head){
+  if(head->next == NULL){
+    return head;
+  }
+  reverse(head->next)->next = head;
+  return head;
 }

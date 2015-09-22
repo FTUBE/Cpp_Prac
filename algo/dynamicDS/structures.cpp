@@ -193,5 +193,16 @@ void BST::traverse(TreeNode* head){
 
 void BST::remove(int val){
   val = 0;
-  
+  //To be implemented.
+}
+
+// Print from here.
+void ListNode::print(){
+  cout << val << "->";
+  ListNode* current = next;
+  while(current != NULL){
+    cout << (current->val) << "->";
+    current = current->next;
+  }
+  cout << "NULL" << endl;
 }
