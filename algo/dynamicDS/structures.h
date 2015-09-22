@@ -13,4 +13,34 @@ stack():size(1),length(0){
   void print();
   int pop();
 };
+
+struct PQueue{
+  int data[10];
+  int pointer;
+PQueue():pointer(1){};
+  void add(int);
+  int remove();
+  void removeAll();
+  int getparent(int);
+  int getmaxindex(int);
+};
+
+struct TreeNode{
+  int val;
+  TreeNode* left;
+  TreeNode* right;
+TreeNode():val(0),left(NULL),right(NULL){};
+TreeNode(int _val):val(_val),left(NULL),right(NULL){};
+};
+  
+struct BST{
+  TreeNode* head;
+  void add(int);
+  bool search(int);
+  void DFS();
+  void traverse(TreeNode*);
+  void remove(int);
+BST():head(NULL){};
+};
+
 #endif
