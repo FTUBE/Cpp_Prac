@@ -8,22 +8,25 @@ void testPQueue(PQueue& pq);
 void BSTtest(BST& bst);
 ListNode* createNode(int);
 ListNode* reverse(ListNode* head);
-  
+ListNode* reverse_norecur(ListNode* head);
+
 int main(){
   stack a;
   PQueue pq;
   BST binarytree;
   int n = 671;
-  ListNode *head = createNode(n);
-  //  head->print();
+  ListNode *head = createNode(1);
+  head->print();
   cout << "Reverse" << endl;
-  ListNode *truehead = head;
-  while(truehead->next != NULL){
+  head = reverse_norecur(head);
+  head->print();
+  /*ListNode *truehead = head;
+    while(truehead->next != NULL){
     truehead = truehead -> next;
   }
   head = reverse(head);
   head->next = NULL;
-  head = truehead;
+  head = truehead;*/
   //head->print();
 }
 
@@ -73,4 +76,31 @@ ListNode* reverse(ListNode* head){
   }
   reverse(head->next)->next = head;
   return head;
+}
+
+ListNode* reverse_norecur(ListNode* head){
+  ListNode* prev = NULL;
+  ListNode* nextnode = NULL;
+  ListNode* cur = head;
+
+  while(cur != NULL){
+    if(cur ->next == NULL){
+      cur -> next = prev;
+      break;
+    }
+    if((cur->next)->next == NULL){
+      ListNode* tempnext = cur->next;
+      tempnext->next = cur;
+      cur->next = prev;
+      cur = tempnext;
+      break;
+    }
+    nextnode = (cur->next)->next;
+    ListNode* tempnext = cur->next;
+    cur->next = prev;
+    tempnext -> next= cur;
+    prev = tempnext;
+    cur = nextnode;
+  }
+  return cur;
 }
