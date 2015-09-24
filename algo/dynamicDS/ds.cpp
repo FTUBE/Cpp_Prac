@@ -9,17 +9,19 @@ void BSTtest(BST& bst);
 ListNode* createNode(int);
 ListNode* reverse(ListNode* head);
 ListNode* reverse_norecur(ListNode* head);
+ListNode* insertion(ListNode* head);
 
 int main(){
   stack a;
   PQueue pq;
   BST binarytree;
   int n = 671;
-  ListNode *head = createNode(1);
+  ListNode *head = createNode(7);
   head->print();
   cout << "Reverse" << endl;
-  head = reverse_norecur(head);
-  head->print();
+  //  head = reverse_norecur(head);
+  head = insertion(head);
+    head->print();
   /*ListNode *truehead = head;
     while(truehead->next != NULL){
     truehead = truehead -> next;
@@ -103,4 +105,47 @@ ListNode* reverse_norecur(ListNode* head){
     cur = nextnode;
   }
   return cur;
+}
+
+// Insetion method of l1->l2->l3->l4->l5->NULL, to l1->l4->l2->l5->l3->NULL.
+// l1->l2->l3->l4->NULL, to l1->l3->l2->l4->NULL.
+
+ListNode* insertion(ListNode* head){
+  ListNode* cur = head;
+  int n = 0;
+  while(cur != NULL){
+    n++;
+    cur = cur->next;
+  }
+  n++;
+  n = n / 2;
+  ListNode* slow = head;
+  ListNode* fast = head;
+  while(n>0){
+    fast = fast -> next;
+    n--;
+  }
+  ListNode* marker = fast;
+  ListNode* slowprev = NULL;
+  ListNode* fastprev = NULL;
+  while(fast != NULL){
+    slowprev = slow;
+    fastprev = fast;
+    ListNode* slownext = slow->next;
+    ListNode* fastnext = fast->next;
+    slow->next = fast;
+    fast->next = slownext;
+    slow = slownext;
+    fast = fastnext;
+  }
+  if(slow != marker){
+    slow -> next = NULL;
+  }
+  else{
+    cout << slowprev->val << endl;
+    cout << fastprev->val << endl;
+    slowprev->next = fastprev;
+    fastprev->next = NULL;
+  }
+  return head;
 }
