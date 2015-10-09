@@ -1,6 +1,7 @@
 #include <iostream>
 #include "structures.h"
 #include <cstdlib>
+#include <queue>
 
 using namespace std;
 
@@ -191,6 +192,38 @@ void BST::traverse(TreeNode* head){
   traverse(head->right);
 }
 
+void BST::BFS(){
+  queue< vector<TreeNode*> > queue1;
+  vector<TreeNode*>* current = new vector<TreeNode*> ();
+  if(this->head){
+    (*current).push_back(this->head);
+  }
+  while(!(*current).empty()){
+    int size = (*current).size();
+    queue1.push(*current);
+    vector<TreeNode*>* next = new vector<TreeNode*>();
+    for(int i = 0; i < size ; i++){
+      TreeNode* cur = (*current)[i];
+      if(cur->left){
+	(*next).push_back(cur->left);
+      }
+      if(cur->right){
+	(*next).push_back(cur->right);
+      }
+    }
+    current = next;
+  }
+  while(!queue1.empty()){
+    vector<TreeNode*> oneLevel = queue1.front();
+    int size = oneLevel.size();
+    cout<< "\n{";
+    for(int i = 0; i < size;i++){
+      cout << oneLevel[i]->val<<" ";
+    }
+    cout<< "}\n";
+    queue1.pop();
+  }
+}
 void BST::remove(int val){
   val = 0;
   //To be implemented.

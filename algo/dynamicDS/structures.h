@@ -40,6 +40,7 @@ struct BST{
   void DFS();
   void traverse(TreeNode*);
   void remove(int);
+  void BFS();
 BST():head(NULL){};
 };
 

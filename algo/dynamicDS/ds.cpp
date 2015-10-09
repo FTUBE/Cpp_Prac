@@ -12,24 +12,12 @@ ListNode* reverse_norecur(ListNode* head);
 ListNode* insertion(ListNode* head);
 
 int main(){
-  stack a;
-  PQueue pq;
   BST binarytree;
-  int n = 671;
-  ListNode *head = createNode(7);
-  head->print();
-  cout << "Reverse" << endl;
-  //  head = reverse_norecur(head);
-  head = insertion(head);
-    head->print();
-  /*ListNode *truehead = head;
-    while(truehead->next != NULL){
-    truehead = truehead -> next;
+  for(int i = 0; i < 128;i++){
+  binarytree.add(i);
   }
-  head = reverse(head);
-  head->next = NULL;
-  head = truehead;*/
-  //head->print();
+  //  binarytree.traverse(binarytree.head);
+  binarytree.BFS();
 }
 
 void teststack(stack& a){
