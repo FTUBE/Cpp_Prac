@@ -9,6 +9,7 @@ using namespace std;
 
 const int MAXPOINT = 9;
 vector<int> adj[MAXPOINT];
+
 Edge* edges[MAXPOINT][MAXPOINT];
 
 void build();
@@ -28,6 +29,7 @@ vector<int> already;
 priority_queue<Edge,vector<Edge>,ecmp> edgequeue;
 vector<Edge> alledges;
 void bellmanford(int start, int end);
+vector<int> distancevec;
 
 void testqueue();
 
@@ -367,3 +369,30 @@ void bellmanford(int start, int end){
   }
   cout << start << " to "<<end << " is "<<distance[end]<<endl;
 }
+
+void dijstra(int start){
+  priority_queue<int,vector<int>,pointcmp> pointleft;
+  for(int i = 0; i < MAXPOINT;i++){
+    if(i == start){
+      distancevec[i] = 0;
+    }
+    else{
+      distancevec[i] = INT_MAX;
+    }
+    pointleft.push(i);
+  }
+  while(!pointleft.empty()){
+    int point = pointleft.top();
+    
+    
+  }
+}
+
+struct pointcmp{
+  bool operator()(int a, int b){
+    if(distancevec[a] >= distancevec[b]){
+      return true;
+    }
+    return false;
+  }
+};
