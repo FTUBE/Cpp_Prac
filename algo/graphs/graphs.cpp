@@ -2,6 +2,9 @@
 #include<vector>
 #include<queue>
 #include"components.h"
+#include<set>
+#include<climits>
+
 using namespace std;
 
 const int MAXPOINT = 9;
@@ -18,8 +21,15 @@ bool find(vector<int> arr, int num);
 void queue_bfs(int start);
 vector<int> queue_bfs_shortestpath(int start);
 void dfs(int start);
-
+vector<int*> kruskal();
+bool samegroup(set<vector<int> >& s,Edge e);
+vector<int*> prims(int start);
 vector<int> already;
+priority_queue<Edge,vector<Edge>,ecmp> edgequeue;
+vector<Edge> alledges;
+void bellmanford(int start, int end);
+
+void testqueue();
 
 int main(){
   build();
@@ -41,10 +51,33 @@ int main(){
   addEdge(0,3,3);
   addEdge(6,8,4);
   addEdge(7,8,8);
+  //  testqueue();
+  /*  cout << "Kruskal Result"<<endl;
+  vector<int*> edgeset = kruskal();
+  for(int i = 0; i < edgeset.size();i++){
+    cout <<"["<<edgeset[i][0]<<","<<edgeset[i][1]<<"]"<<endl;
+  }
+  cout << "Prims Result with start 1"<<endl;
+   edgeset = prims(1);
+  for(int i = 0; i < edgeset.size();i++){
+    cout <<"["<<edgeset[i][0]<<","<<edgeset[i][1]<<"]"<<endl;
+  }
+  cout << "Prims Result with start 8"<<endl;
+  edgeset = prims(8);
+  for(int i = 0; i < edgeset.size();i++){
+    cout <<"["<<edgeset[i][0]<<","<<edgeset[i][1]<<"]"<<endl;
+    }*/
+  cout<< "Bellman-Ford"<<endl;
+  int from,to;
+  cout << "from"<<endl;
+  cin>>from;
+  cout << "to"<<endl;
+  cin>>to;  
+  bellmanford(from,to);
   /* Graph building.*/
 
   //  print_adj(1);
-  //    print_matrix();
+  //      print_matrix();
 
   //bfs.
   /*    bfs(0);
@@ -67,10 +100,12 @@ void build(){
 }
 
 void addEdge(int pointa, int pointb,int _weight){
+
   if(pointa >= MAXPOINT || pointb >= MAXPOINT){
     cout << "limit value exceeded."<<endl;
     return;
   }
+  
   if(!find(adj[pointa],pointb)){
     adj[pointa].push_back(pointb);
   }
@@ -79,9 +114,11 @@ void addEdge(int pointa, int pointb,int _weight){
     adj[pointb].push_back(pointa);
   }
   
-  Edge* newedge = new Edge(_weight);
+  Edge* newedge = new Edge(_weight,pointa,pointb);
   edges[pointa][pointb] = newedge;
   edges[pointb][pointa] = newedge;
+  edgequeue.push(*newedge);
+  alledges.push_back(*newedge);
 }
 
 void print_adj(int point){
@@ -201,4 +238,132 @@ void dfs(int start){
     }
   }
   return;
+}
+
+vector<int*> kruskal(){
+  vector<int*> toret;
+  set<vector<int> > s;
+  for(int i = 0; i < MAXPOINT; i++){
+    vector<int>* a_set = new vector<int>();
+    (*a_set).push_back(i);
+    s.insert(*a_set);
+  }
+  while(s.size() > 1){
+    Edge e = edgequeue.top();
+    edgequeue.pop();
+    while(samegroup(s,e)){
+      e = edgequeue.top();
+      edgequeue.pop();
+    }
+    int *toadd = new int[2];
+    toadd[0] = e.pointa;
+    toadd[1] = e.pointb;
+    toret.push_back(toadd);
+    //    cout << s.size()<<endl;
+  }
+  return toret;
+}
+
+void testqueue(){
+  while(edgequeue.size() > 0){
+    cout << edgequeue.top().weight<<endl;
+    edgequeue.pop();
+  }
+}
+
+bool samegroup(set<vector<int> >& s,Edge e){
+  for(set<vector<int> >::iterator it = s.begin(); it != s.end();it++){
+    int a = e.pointa;
+    int b = e.pointb;
+    if(find((*it),a)){
+      if(find((*it),b)){
+	return true;
+      }
+      set<vector<int> >::iterator itb = s.begin();
+      vector<int> copyorigin = (*it);
+      while(itb != s.end()){
+	if(find((*itb),b)){
+	  for(int i = 0; i <(*itb).size();i++){
+	    copyorigin.push_back((*itb)[i]);
+	  }
+	  break;
+	}
+	itb++;
+      }
+      s.erase(*itb);
+      s.erase(*it);
+      s.insert(copyorigin);
+      return false;
+    }
+  } 
+}
+
+vector<int*> prims(int start){
+  vector<int*> toret;
+  priority_queue<Edge,vector<Edge>,ecmp> eq;
+  vector<int> node_set;
+  node_set.push_back(start);
+  vector<int> adjacent = adj[start];
+  for(int i = 0; i <adjacent.size();i++){
+    eq.push(*edges[start][adjacent[i]]);
+  }
+  while(node_set.size() < MAXPOINT){
+    Edge e = eq.top();
+    eq.pop();
+    bool a = find(node_set,e.pointa);
+    bool b = find(node_set,e.pointb);
+
+    if(a && b){
+      continue;
+    }
+    
+    int *newedge = new int[2];
+    newedge[0] = e.pointa;
+    newedge[1] = e.pointb;
+    
+    toret.push_back(newedge);
+    if(a){
+      node_set.push_back(e.pointb);
+      adjacent = adj[e.pointb];
+      for(int i = 0; i <adjacent.size();i++){
+	eq.push(*edges[e.pointb][adjacent[i]]);
+      }
+    }
+    else{
+      node_set.push_back(e.pointa);
+      adjacent = adj[e.pointa];
+      for(int i = 0; i <adjacent.size();i++){
+	eq.push(*edges[e.pointa][adjacent[i]]);
+      }
+    }
+  }
+  return toret;
+}
+
+void bellmanford(int start, int end){
+  int distance[MAXPOINT];
+  for(int i = 0; i < MAXPOINT; i++){
+    if(i == start){
+      distance[i] = 0;
+      continue;
+    }
+    distance[i] = INT_MAX;
+  }
+  for(int i = 0; i < MAXPOINT-1; i++){
+    for(int n = 0; n < alledges.size();n++){
+      Edge e = alledges[n];
+      //cout << "relax Edge "<<n<<endl;
+      if(distance[e.pointa] != INT_MAX){
+	if(distance[e.pointa] + e.weight < distance[e.pointb]){
+	  distance[e.pointb] = distance[e.pointa] + e.weight;
+	}
+      }
+      if(distance[e.pointb] != INT_MAX){
+	if(distance[e.pointb] + e.weight < distance[e.pointa]){
+	  distance[e.pointa] = distance[e.pointb] + e.weight;
+	}
+      }
+    }
+  }
+  cout << start << " to "<<end << " is "<<distance[end]<<endl;
 }
