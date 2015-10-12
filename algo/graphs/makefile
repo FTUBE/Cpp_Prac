@@ -5,4 +5,4 @@ graphs.o: graphs.cpp
 components.o: components.cpp
 	g++ -c components.cpp -Wall
 clean:
-	rm -f *.o *~ graphs
+	rm -f *.o *~ graphs *#

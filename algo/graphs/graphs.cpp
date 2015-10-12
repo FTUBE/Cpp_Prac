@@ -29,9 +29,18 @@ vector<int> already;
 priority_queue<Edge,vector<Edge>,ecmp> edgequeue;
 vector<Edge> alledges;
 void bellmanford(int start, int end);
-vector<int> distancevec;
-
+vector<int> distancevec(MAXPOINT);
 void testqueue();
+void dijstra(int start);
+
+struct pointcmp{
+  bool operator()(int a, int b){
+    if(distancevec[a] >= distancevec[b]){
+      return true;
+    }
+    return false;
+  }
+};
 
 int main(){
   build();
@@ -69,13 +78,13 @@ int main(){
   for(int i = 0; i < edgeset.size();i++){
     cout <<"["<<edgeset[i][0]<<","<<edgeset[i][1]<<"]"<<endl;
     }*/
-  cout<< "Bellman-Ford"<<endl;
+  /*  cout<< "Bellman-Ford"<<endl;
   int from,to;
   cout << "from"<<endl;
   cin>>from;
   cout << "to"<<endl;
   cin>>to;  
-  bellmanford(from,to);
+  bellmanford(from,to);*/
   /* Graph building.*/
 
   //  print_adj(1);
@@ -89,7 +98,13 @@ int main(){
   cout << " 0 -> " << i << " : "<<dis[i]<<endl;
   }*/
   //   dfs(0);
-  
+  int from;
+  cout<<"From"<<endl;
+  cin >> from;
+  dijstra(from);
+  for(int i = 0; i < MAXPOINT; i++){
+    cout << from << "->" << i<<" = "<<distancevec[i]<<endl;
+  }
 }
 
 void build(){
@@ -372,6 +387,7 @@ void bellmanford(int start, int end){
 
 void dijstra(int start){
   priority_queue<int,vector<int>,pointcmp> pointleft;
+  vector<int> pointleft_c;
   for(int i = 0; i < MAXPOINT;i++){
     if(i == start){
       distancevec[i] = 0;
@@ -380,19 +396,26 @@ void dijstra(int start){
       distancevec[i] = INT_MAX;
     }
     pointleft.push(i);
+    pointleft_c.push_back(i);
   }
   while(!pointleft.empty()){
     int point = pointleft.top();
-    
-    
+    vector<int> adjacent = adj[point];
+    for(int i = 0; i < adjacent.size(); i++){
+      if(distancevec[point] + (*edges[point][adjacent[i]]).weight < distancevec[adjacent[i]]){
+	distancevec[adjacent[i]] = distancevec[point] + (*edges[point][adjacent[i]]).weight;
+      }
+    }
+    priority_queue<int,vector<int>,pointcmp> newqueue;
+    vector<int> new_c;
+    for(int i = 0; i<pointleft_c.size();i++){
+      if(pointleft_c[i] == point){
+	continue;
+      }
+      newqueue.push(pointleft_c[i]);
+      new_c.push_back(pointleft_c[i]);
+    }
+    pointleft_c = new_c;
+    pointleft = newqueue;    
   }
 }
-
-struct pointcmp{
-  bool operator()(int a, int b){
-    if(distancevec[a] >= distancevec[b]){
-      return true;
-    }
-    return false;
-  }
-};
