@@ -3,6 +3,8 @@
 
 using namespace std;
 
+int Date::counter = 0;
+
 Date::Date(int d,int m, int y){
   if(d < 1 || d > 31){
     cout << d << "Illegal day\n";
@@ -17,13 +19,17 @@ Date::Date(int d,int m, int y){
     y = 2000;
   }
   day = d; month = m; year = y;
+  counter++;
 };
 
-Date Date::nextDate(){
+Date::~Date(){
+  counter--;
+};
+Date Date::nextDate() const{
   int newd = day+1;
   int newm = month;
   int newy = year;
-
+  
   if(newd > 31){
     newd = 1;
     newm++;
@@ -54,6 +60,10 @@ bool Date::equal(Date aDate){
   return aDate.month == month && aDate.year == year && aDate.day == day;
 };
 
-void Date::print(){
+void Date::print() const{
   printf("%d / %d / %d\n",day,month,year);
+};
+
+void Date::c(){
+  printf("Number of dates : %d\n", counter);
 }

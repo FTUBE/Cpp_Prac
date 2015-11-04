@@ -1,12 +1,12 @@
 #include<iostream>
-#include<string>
 
 using namespace std;
 
 const int MAXLENGTH = 101;
 
-int parse(string);
-int clear(string str);
+int parse(char*);
+int clear(char*);
+void ins(char* str, int offset,char inchar);
 
 int main(){
 
@@ -14,59 +14,100 @@ int main(){
   cin >> num;
   cin.ignore();
   int res[num];
+
+  int size = num;
   
   char *line = new char[MAXLENGTH];
+
+  int index = 0;
   
-  for(int i = 0; i < num; i++){
+  while(num-- > 0){
     cin.getline(line,MAXLENGTH);
-    string str(line);
-    res[i] = parse(str);    
+    res[index++] = parse(line);
   }
-  
-  for(int i = 0; i < num;i++){
+
+  for(int i = 0; i < size; i++){
     cout << res[i] << endl;
   }
-    
   return 0; 
 }
 
-int parse(string str){
+int parse(char* str){
   int max = -1;
-  for(int i = 0; i < 3; i++){
-    for(int n = 0; n <= str.length();n++){
-      string newstr(str);
-      newstr.insert(newstr.begin()+n,'A' + i);
-      //cout << newstr<<endl;
-      int thisc = clear(newstr);
-      if(thisc >= max){
-	max = thisc;
-	continue;
+  char *cpy = new char[strlen(str)+2];
+  int len = strlen(str);
+  for(int i = 0; i < 3;i++){
+    for(int n = 0; n <= len; n++){
+      strcpy(cpy,str);
+      ins(cpy,n,'A'+i);
+      int cur = clear(cpy);
+      if(cur > max){
+	max = cur;
+	if(max == len + 1){
+	  return max;
+	}
       }
     }
   }
   return max;
 }
 
-int clear(string str){
-  //  cout << str<<endl;
-  string newstr = "";
+int clear(char *str){
 
-  for(int i = 0; i < str.length();i++){
+  char *newone = new char[strlen(str) + 1]; 
+  char *prev = str;
+  int index = 0;
 
-    bool ent = false;
-    while(str[i] == str[i+1]){
-      ent = true;
-      i++;
+  while(true){
+    int prevlen = strlen(prev);
+    for(int i = 0; i < prevlen;i++){
+      int mae = i-1;
+      int ato = i+1;
+      if(mae == -1){
+	if(prev[ato] != prev[i]){
+	  newone[index++] = prev[i];
+	}
+	continue;
+      }
+      if(ato == prevlen){
+	if(prev[mae] != prev[i]){
+	  newone[index++] = prev[i];
+	}
+	continue;
+      }
+      if(prev[mae] != prev[i] && prev[i] != prev[ato]){
+	newone[index++] = prev[i];
+      }
     }
-    if(ent){
-      continue;
+    
+    newone[index] = '\0';
+    index = 0;
+
+    if(prevlen == strlen(newone)){
+      break;
     }
-    newstr.push_back(str[i]);
+    prev = newone;
+    newone = new char[strlen(newone) + 1];
   }
-  int del = str.length() - newstr.length();
+
+  return strlen(str) - strlen(prev);
+}
+
+void ins(char* str, int offset,char inchar){
+
+  while(offset != 0){
+    offset--;
+    str++;
+  }
   
-  if(del == 0){
-    return 0;
+  char prev = *str;
+  *str = inchar;
+  str++;
+  while(prev != '\0'){
+    char tmp = *str;
+    *str = prev;
+    prev = tmp;
+    str++;    
   }
-  return del+clear(newstr);
+  *str = '\0';
 }

@@ -1,5 +1,0 @@
-book
-dictionary
-novel
-poster
-biblography

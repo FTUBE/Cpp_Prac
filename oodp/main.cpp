@@ -3,16 +3,11 @@
 using namespace std;
 
 int main(){
-  Date a(18,1,1992);
-  a.print();
-
-  Date b = a.nextDate();
-  b.print();
-
-  a.print();
-  cout << "==Change the date of a==\n";
-
-  a.next();
-  a.print();
-  return 0 ;
+  Date* a = new Date(18,1,1992);
+  Date b(17,1,1992);
+  //  a.print();
+  delete a;
+  
+  Date::c();
+  return 0;
 }
