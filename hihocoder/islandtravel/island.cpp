@@ -1,80 +1,69 @@
 #include <iostream>
 #include <climits>
 #include <cstdlib>
+#include <cstring>
 
 using namespace std;
 
-int dijstra(int **edge,int cnt);
+int spfa(int**,int cnt);
 int getdis(int pos1[2],int pos2[2]);
 int getmin(int a, int b);
 int findmin(int *arr,int cnt,int *exist);
 
 int main(){
-
   int cnt;
   cin >> cnt;
   int pos[cnt][2];
-  
   for(int i = 0; i < cnt;i++){
-    cin >> pos[i][0] >> pos[i][1];
+    scanf("%d %d",&pos[i][0],&pos[i][1]);
   }
-
   int **edge = new int*[cnt];
-  for(int i = 0; i < cnt; i++){
-    edge[i] = new int[cnt];
-  }
   
+  for(int i = 0; i < cnt; i++) edge[i] = new int[cnt];
+
   for(int i = 0 ; i < cnt;i++){
-    for(int j = 0 ; j <cnt;j++){
+    for(int j = i ; j <cnt;j++){
       int len = getdis(pos[i],pos[j]);
       edge[i][j] = len;
+      edge[j][i] = len;
     }
-  }
-  
-  int res = dijstra(edge,cnt);
+  }  
+  int res = spfa(edge,cnt); // dijstra(edge,cnt);
   cout<<res<<endl;
-  for(int i = 0; i < cnt; i++){
-    delete []edge[i];
-  }
-  
+  return 0;
 }
 
-int dijstra(int** edge,int cnt){
-  int s[cnt];
+int spfa(int **edge,int cnt){
+  int tp = 0;
+  int end = 1;
+  int *q = new int[cnt * cnt];
+  q[tp] = 0;
+  int inqueue[cnt];
   int dis[cnt];
-  
-  memset(s,-1,sizeof(int) * cnt);
-  for(int i = 0 ; i < cnt; i++){
+  memset(inqueue,-1,sizeof(int) * cnt);
+
+  for(int i = 0; i < cnt; i++){
     dis[i] = INT_MAX;
   }
-  dis[0] = 0;
-  int num = 0;
-  while(num < cnt){
-    int index = findmin(dis,cnt,s);
-    for(int i = 0; i < cnt;i++){
-      dis[i] = getmin(dis[i],dis[index] + edge[index][i]);
-    }
-    s[index] = 0;
-    num++;
-  }
   
+  dis[0] = 0;
+
+  while(tp < end){
+    int point = q[tp++];
+    inqueue[point] = -1;
+    for(int i = 0; i < cnt;i++){
+      if(dis[i] > dis[point] + edge[point][i]){
+	dis[i] = dis[point] + edge[point][i];
+	if(inqueue[i] == -1){
+	  q[end++] = i;
+	  inqueue[i] = 0;
+	}
+      }
+    }
+  }
   return dis[cnt-1];
 }
 
-
-int findmin(int *arr,int cnt,int *exist){
-
-  int toret = INT_MAX;
-  int k = 0;
-  
-  for(int i = 0; i < cnt;i++){
-    if(arr[i] < toret && exist[i] == -1){
-      toret = arr[i];
-      k = i;
-    }
-  }
-  return k;
-}
 int getdis(int pos1[2],int pos2[2]){
   
   int red1 = abs(pos1[0] - pos2[0]);

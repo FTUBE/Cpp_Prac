@@ -5,12 +5,14 @@
 using namespace std;
 
 int main(){
-  queue<int> queue1;
-  for(int i = 0;i<128; i++){
-    queue1.push(i);
+  priority_queue<int,vector<int>,greater<int> > queue1;
+  int num;
+  for(int i = 5;i > 0; i--){
+    cin>>num;
+    queue1.push(num);
   }
   while(!queue1.empty()){
-    cout << queue1.front()<<endl;
+    cout << queue1.top()<<endl;
     queue1.pop();
   }
 }
