@@ -1,18 +1,32 @@
-#include<iostream>
-#include<stack>
-#include<queue>
+#include <iostream>
+#include <map>
 
 using namespace std;
 
 int main(){
-  priority_queue<int,vector<int>,greater<int> > queue1;
-  int num;
-  for(int i = 5;i > 0; i--){
-    cin>>num;
-    queue1.push(num);
+
+  map<char*,int> mp;
+
+  for(int i = 0 ; i < 15 ;i++){
+    char *newstr = new char[2];
+    newstr[0] = 'a' + i;
+    newstr[1] = '\0';
+    mp[newstr] = 1;
   }
-  while(!queue1.empty()){
-    cout << queue1.top()<<endl;
-    queue1.pop();
+  
+
+  map<char*,int>::iterator it;
+  
+  for(it = mp.begin(); it != mp.end(); it++){
+    cout << it->first << " -> "<< it->second<<endl;
+    delete it->first;
   }
+
+  /*  it = mp.find("a");
+  if(it == mp.end()) cout << "Not find\n";
+  
+  it = mp.find("c");
+  if(it == mp.end()) cout << "Not find\n";
+  */
+  return 0;
 }

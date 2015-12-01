@@ -1,0 +1,4 @@
+lucky:lucky.cpp
+	g++ lucky.cpp -o lucky
+clean:
+	rm -f *.o *~ *# lucky
